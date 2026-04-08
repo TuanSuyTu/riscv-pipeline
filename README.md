@@ -29,16 +29,16 @@ The project has been synthesized and implemented on the **Xilinx Kria K26 SOM** 
 ### Resource Utilization
 | Resource | Utilization |
 |----------|-------------|
-| **LUTs** | 1148 |
-| **Registers** | 474 |
+| **CLB LUTs** | 1115 |
+| **CLB Registers** | 474 |
 | **Block RAM (Tile)** | 1 |
-| **CARRY4** | 56 |
+| **CARRY8** | 28 |
 | **F7 Muxes** | 1 |
 
 ### Timing & Power
-- **Critical Path Delay**: ~14.25 ns.
-- **Target Frequency (Fmax)**: ~70 MHz (Synthesized on Zynq-7000 series).
-- **Setup Slack (at 10.5 ns)**: -3.747 ns (WNS requires frequency adjustment for timing closure).
+- **Critical Path Delay**: ~8.32 ns.
+- **Target Frequency (Fmax)**: ~120 MHz (Synthesized on Zynq UltraScale+ Kria K26).
+- **Setup Slack (at 100 MHz)**: +2.176 ns (WNS, All timing constraints met).
 
 ## Verification
 
