@@ -1,0 +1,1 @@
+--timescale "1ns/1ps" -top "tb_top" -snapshot "final_check" 

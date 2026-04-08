@@ -1,3 +1,10 @@
+// =============================================================================
+// Project: RISC-V 5-Stage Pipelined Processor
+// Module: imm_gen
+// Description: Immediate Generator unit for RV32I.
+//              Signs extends and reshuffles immediate fields based on opcode.
+// =============================================================================
+
 `timescale 1ns / 1ps
 
 module imm_gen (
@@ -13,15 +20,15 @@ module imm_gen (
             7'b1100111: // JALR
                 imm_out = {{20{instr[31]}}, instr[31:20]};
 
-            7'b0100011: // S-Type
+            7'b0100011: // S-Type (Store)
                 imm_out = {{20{instr[31]}}, instr[31:25], instr[11:7]};
 
-            7'b1100011: // B-Type
+            7'b1100011: // B-Type (Branch)
                 imm_out = {{19{instr[31]}}, instr[31], instr[7],
                            instr[30:25], instr[11:8], 1'b0};
 
             7'b0110111, // LUI
-            7'b0010111: // AUIPC
+            7'b0010111: // AUIPC (Upper Immediates)
                 imm_out = {instr[31:12], 12'b0};
 
             7'b1101111: // J-Type (JAL)

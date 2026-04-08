@@ -1,0 +1,35 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Wed Apr  8 21:37:40 2026
+# Process ID: 33628
+# Current directory: E:/VSCode/Github/Gitpush/riscv_pipeline/sim_logs
+# Command line: xsim.exe -mode tcl -source {xsim.dir/tb_snap2/xsim_script.tcl}
+# Log file: E:/VSCode/Github/Gitpush/riscv_pipeline/sim_logs/xsim.log
+# Journal file: E:/VSCode/Github/Gitpush/riscv_pipeline/sim_logs\xsim.jou
+# Running On: TuanUSau, OS: Windows, CPU Frequency: 3194 MHz, CPU Physical cores: 16, Host memory: 17024 MB
+#-----------------------------------------------------------
+source xsim.dir/tb_snap2/xsim_script.tcl
+# xsim {tb_snap2} -autoloadwcfg -tclbatch {debug.tcl}
+Time resolution is 1 ps
+source debug.tcl
+## open_vcd waves_debug.vcd
+## log_vcd /tb_top/uut/reg_write_wb
+## log_vcd /tb_top/uut/rd_addr_wb
+## log_vcd /tb_top/uut/wd_data_wb
+## log_vcd /tb_top/uut/reg_write_m2
+## log_vcd /tb_top/uut/rd_addr_m2
+## log_vcd /tb_top/uut/alu_result_wb
+## log_vcd /tb_top/uut/mem_to_reg_wb
+## log_vcd /tb_top/uut/reg_write_mem
+## log_vcd /tb_top/uut/rd_addr_mem
+## log_vcd /tb_top/uut/alu_result_mem
+## run 200ns
+ERROR: Could not open vcd file waves.vcd. A VCD file by name waves_debug.vcd has already been opened. Only one VCD file is allowed to be open.
+=================================================
+  PHASE 1: ISA Coverage Test
+=================================================
+## close_vcd
+## exit
+INFO: [Common 17-206] Exiting xsim at Wed Apr  8 21:37:42 2026...

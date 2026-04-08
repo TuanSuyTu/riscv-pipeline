@@ -1,77 +1,80 @@
 # 5-Stage Pipelined RISC-V Processor (RV32I Subset)
 
-> This project was built to explore and review hardware design patterns related to SoCs. It demonstrates a deep understanding of how an instruction flows from Fetch to Decode, and how data hazards are resolved using Forwarding and Pipeline Stalls to reduce cycle penalties.
+> This project implements a cycle-accurate, 5-stage pipelined RISC-V processor in Verilog. It is optimized for FPGA deployment with synchronous BRAM data memory and robust hazard handling.
+
+## Key Features
+
+- **5-stage Pipeline**: `IF` (Fetch) → `ID` (Decode) → `EX` (Execute) → `MEM` (Memory) → `WB` (Write-Back).
+- **Synchronous BRAM Integration**: Data Memory (4KB) is inferred as Xilinx Block RAM for high-frequency performance.
+- **BRAM Stall Logic**: Automatically manages the 1-cycle synchronous read latency by injecting a controlled 1-cycle stall during Memory operations.
+- **Full Forwarding (Bypassing)**: Resolves RAW (Read-After-Write) hazards via EX-EX and MEM-EX bypassing, maintaining a CPI close to 1 for arithmetic code.
+- **Hazard Detection Unit**: Supports interlocking for "Load-Use" dependencies, ensuring data integrity when a LOAD result is consumed immediately.
+- **Branch Resolution**: Branches and jumps are resolved in the EX stage with pipeline flushing on taken/mispredicted paths.
 
 ## Instruction Set Support (RV32I)
 
-This processor implements a robust subset of the **RV32I Base Integer Instruction Set**, ensuring full compatibility with standard RISC-V toolchains for core computational tasks. Instructions are categorized by their format:
+| Type | Instructions |
+|------|--------------|
+| **R-type** | `ADD`, `SUB`, `SLL`, `SLT`, `SLTU`, `XOR`, `SRL`, `SRA`, `OR`, `AND` |
+| **I-type** | `ADDI`, `SLTI`, `SLTIU`, `XORI`, `ORI`, `ANDI`, `SLLI`, `SRLI`, `SRAI`, `LW`, `LB`, `LH`, `LBU`, `LHU`, `JALR` |
+| **S-type** | `SW`, `SB`, `SH` |
+| **B-type** | `BEQ`, `BNE`, `BLT`, `BGE`, `BLTU`, `BGEU` |
+| **U-type** | `LUI`, `AUIPC` |
+| **J-type** | `JAL` |
 
-- **R-type (Register-to-Register)**: `ADD`, `SUB`, `SLL`, `SLT`, `SLTU`, `XOR`, `SRL`, `SRA`, `OR`, `AND`
-- **I-type (Immediate Arithmetic & Load)**:
-    - *Arithmetic*: `ADDI`, `SLTI`, `SLTIU`, `XORI`, `ORI`, `ANDI`, `SLLI`, `SRLI`, `SRAI`
-    - *Load*: `LW`, `LB`, `LH`, `LBU`, `LHU`
-    - *Control*: `JALR`
-- **S-type (Store)**: `SW`, `SB`, `SH`
-- **B-type (Conditional Branch)**: `BEQ`, `BNE`, `BLT`, `BGE`, `BLTU`, `BGEU`
-- **U-type (Upper Immediate)**: `LUI`, `AUIPC`
-- **J-type (Unconditional Jump)**: `JAL`
+## Hardware Synthesis Results
 
-Key architectural features include:
-- **5-stage in-order pipeline:** `IF` (Fetch) → `ID` (Decode) → `EX` (Execute) → `MEM` (Memory) → `WB` (Write-Back).
-- **Hazard Detection Unit:** Stalls the pipeline when a `Load-Use Data Hazard` is detected (when a dependent instruction immediately follows a Load). This freezes the PC and inserts a `NOP` bubble into the EX stage.
-- **Forwarding Unit (Bypass):** Allows subsequent instructions to "borrow" the ALU result from the immediately preceding instruction (EX-EX forwarding) or an older instruction (MEM-EX forwarding) instead of waiting for it to be written to the register file. This entirely resolves 90% of RAW (Read-After-Write) hazards.
-- **Branch Flush:** Resolves conditional branches at the `EX` stage, flushing the pipeline if mispredicted.
+The project has been synthesized and implemented on the **Xilinx Kria K26 SOM** (Zynq UltraScale+).
 
-*Developed entirely in Verilog (RTL).*
+### Resource Utilization
+| Resource | Utilization |
+|----------|-------------|
+| **CLB LUTs** | 1122 |
+| **CLB Registers** | 474 |
+| **Block RAM (Tile)** | 1 |
+| **CARRY8** | 28 |
+| **F7 Muxes** | 1 |
 
-## Hardware Synthesis & Implementation Results
+### Timing & Power
+- **Target Frequency**: ~150 MHz (Theoretical Fmax based on WNS).
+- **Slack (at 100 MHz)**: +3.819 ns (WNS).
+- **Power Consumption**: ~0.304 W.
 
-The RTL design has been rigorously constrained, synthesized, and implemented using **Vivado** targeting the **Xilinx Kria K26 SOM** (Zynq UltraScale+). 
+## Verification
 
-### 1. Timing Closure (Fmax ~150 MHz)
-The pipeline operates cleanly with *Zero Setup/Hold violations*. With an applied target clock of **10.5 ns (~95.2 MHz)**, the post-implementation routing yields a massive Worst Negative Slack (WNS) of **+3.819 ns**, bringing the theoretical maximum frequency (Fmax) of the core to **~150 MHz**.
-![Clock Constraint](riscv_clock.png)
-![Timing Summary](riscv_timing.png)
+The processor is verified via a self-checking testbench (`tb_top.v`) that runs a 3-phase regression suite:
+1. **ISA Coverage**: Tests every supported instruction bit-accurately.
+2. **Hazard Stress Test**: Forces complicated EX-EX and MEM-EX forwarding scenarios and Load-Use stalls.
+3. **Integration**: Executes a "Sum 1 to 10" assembly program.
 
-### 2. Resource & Power Efficiency
-The core's physical footprint is highly optimized. Power tracking post-layout highlights phenomenal efficiency due to a balanced pipeline logic depth.
-- **Resource Utilization**: ~1221 LUTs, 467 Registers
-- **Power**: ~0.304 W (Dynamic + Static)
-![Resource Utilization](riscv_resource.png)
-![Power Summary](riscv_power.png)
+**Result: 20/20 Checks PASSED.**
 
-## Code Structure
+## Architecture Overview
 
-```text
-riscv_pipeline/
-├── rtl/
-│   ├── top.v               // Top Module, integrates DataPath, Forwarding, and Hazard Detection
-│   ├── pc_reg.v            // Program Counter
-│   ├── alu.v               // Arithmetic Logic Unit (Addition, Subtraction, Equality Check)
-│   ├── control.v           // Instruction Decoder Unit
-│   ├── hazard.v            // Hazard Unit for stalling
-│   ├── forward.v           // Forwarding Unit MUXes
-│   └── ... (pipeline registers: if_id_reg, id_ex_reg, ex_mem_reg, mem_wb_reg)
-├── tb/
-│   ├── tb_top.v            // Self-checking automated testbench
-│   └── test_*.hex          // Executable hex files (ISA checks, Hazard checks)
-└── sim_logs/               // Vivado simulation logs
+```mermaid
+graph LR
+    IF[IF: Fetch] --> ID[ID: Decode]
+    ID --> EX[EX: Execute]
+    EX --> MEM[MEM: Memory]
+    MEM --> WB[WB: Write-Back]
+    
+    subgraph "Hazard Management"
+    FWD[Forwarding Unit] -.-> EX
+    HAZ[Hazard Detection] -.-> IF & ID
+    BRAM_STALL[BRAM Stall Logic] -.-> IF & ID & EX
+    end
 ```
 
-## Running the Simulation
+## How to Run
 
-Simulation executes an automated 3-phase behavioral test covering:
-1. **ISA Coverage Test**: Validates ALU logic, Load/Store address calculation, and branches.
-2. **Hazard & Forwarding Tests**: Rigorously tests `EX-EX` forwarding, `MEM-EX` forwarding, and `Load-Use` branch stall injections.
-3. **Integration Test**: Computes the sum from 1 to 10 in Assembly.
-
-If using Vivado CLI from the `riscv_pipeline` directory:
+### Simulation (Vivado CLI)
 ```bash
 mkdir sim_logs
 cd sim_logs
 xvlog -sv ../rtl/*.v ../tb/*.v
-xelab --timescale 1ns/1ps -debug typical -top tb_top -snapshot tb_top_snapshot
-xsim tb_top_snapshot -R
+xelab --timescale 1ns/1ps -top tb_top -snapshot snapshot
+xsim snapshot -R
 ```
 
-
+### Synthesis
+Open Vivado and add files in `rtl/`. Targeting Kria K26 or similar Zynq UltraScale+ boards is recommended for best BRAM utilization.

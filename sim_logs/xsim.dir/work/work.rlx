@@ -1,0 +1,19 @@
+0.7
+2020.2
+Oct 14 2022
+05:20:55
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/alu.v,1775660540,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/control.v,,alu;alu_control,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/control.v,1775645639,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/dmem.v,,control,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/dmem.v,1775658741,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/ex_mem_reg.v,,dmem,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/ex_mem_reg.v,1775660160,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/forward.v,,ex_mem_reg,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/forward.v,1775658594,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/hazard.v,,forward,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/hazard.v,1775658592,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/id_ex_reg.v,,hazard,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/id_ex_reg.v,1775645736,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/if_id_reg.v,,id_ex_reg,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/if_id_reg.v,1775645754,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/imem.v,,if_id_reg,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/imem.v,1775645701,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/imm_gen.v,,imem,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/imm_gen.v,1775645720,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/mem_wb_reg.v,,imm_gen,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/mem_wb_reg.v,1775645778,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/pc_reg.v,,mem_wb_reg,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/pc_reg.v,1775645691,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/regfile.v,,pc_reg,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/regfile.v,1775645655,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/top.v,,regfile,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/rtl/top.v,1775659005,systemVerilog,,E:/VSCode/Github/Gitpush/riscv_pipeline/tb/tb_top.v,,top,,,,,,,,
+E:/VSCode/Github/Gitpush/riscv_pipeline/tb/tb_top.v,1775659357,systemVerilog,,,,tb_top,,,,,,,,

@@ -1,8 +1,14 @@
+// =============================================================================
+// Project: RISC-V 5-Stage Pipelined Processor
+// Module: if_id_reg
+// Description: Pipeline stage register between Fetch (IF) and Decode (ID).
+// =============================================================================
+
 module if_id_reg (
     input         clk,
     input         rst,
-    input         stall,
-    input         flush,
+    input         stall,      // Freeze during hazards or BRAM wait
+    input         flush,      // Clear on branch mispredict
     input  [31:0] pc_in,
     input  [31:0] instr_in,
     output reg [31:0] pc_out,

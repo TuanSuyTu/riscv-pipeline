@@ -1,12 +1,19 @@
+// =============================================================================
+// Project: RISC-V 5-Stage Pipelined Processor
+// Module: alu
+// Description: Arithmetic Logic Unit for RV32I.
+// =============================================================================
+
 `timescale 1ns / 1ps
 
 module alu (
     input  [31:0] a,
     input  [31:0] b,
-    input  [4:0]  alu_ctrl,
+    input  [3:0]  alu_ctrl, // 4-bit Control interface
     output reg [31:0] result,
     output zero
 );
+    // Operation encodings
     localparam ADD    = 4'b0000;
     localparam SUB    = 4'b0001;
     localparam AND    = 4'b0010;
@@ -36,49 +43,7 @@ module alu (
         endcase
     end
 
+    // Zero flag used for conditional branches
     assign zero = (result == 32'd0);
-endmodule
 
-module alu_control (
-    input  [1:0] alu_op,
-    input  [2:0] funct3,
-    input        funct7_5,
-    input        lui,
-    output reg [3:0] alu_ctrl
-);
-    always @(*) begin
-        case (alu_op)
-            2'b00: alu_ctrl = lui ? 4'b1010 : 4'b0000; // LW/SW/AUIPC -> ADD; LUI -> PASS_B
-            2'b01: alu_ctrl = 4'b0001;                 // Branch -> SUB
-            
-            2'b10: begin // R-type
-                case (funct3)
-                    3'b000: alu_ctrl = funct7_5 ? 4'b0001 : 4'b0000;
-                    3'b001: alu_ctrl = 4'b0101;
-                    3'b010: alu_ctrl = 4'b1000;
-                    3'b011: alu_ctrl = 4'b1001;
-                    3'b100: alu_ctrl = 4'b0100;
-                    3'b101: alu_ctrl = funct7_5 ? 4'b0111 : 4'b0110;
-                    3'b110: alu_ctrl = 4'b0011;
-                    3'b111: alu_ctrl = 4'b0010;
-                    default: alu_ctrl = 4'b0000;
-                endcase
-            end
-
-            2'b11: begin // I-type ALU
-                case (funct3)
-                    3'b000: alu_ctrl = 4'b0000;
-                    3'b001: alu_ctrl = 4'b0101;
-                    3'b010: alu_ctrl = 4'b1000;
-                    3'b011: alu_ctrl = 4'b1001;
-                    3'b100: alu_ctrl = 4'b0100;
-                    3'b101: alu_ctrl = funct7_5 ? 4'b0111 : 4'b0110;
-                    3'b110: alu_ctrl = 4'b0011;
-                    3'b111: alu_ctrl = 4'b0010;
-                    default: alu_ctrl = 4'b0000;
-                endcase
-            end
-            default: alu_ctrl = 4'b0000;
-        endcase
-    end
 endmodule

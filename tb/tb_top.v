@@ -60,7 +60,7 @@ module tb_top;
         uut.dmem_inst.mem[1] = 32'd200;
         uut.dmem_inst.mem[2] = 32'hFFFFFFFF;
 
-        RUN(60);
+        RUN(75);   // 19 instrs × ~4 CPI + BRAM stalls cho 2 LW
 
         CHECK(1,  32'd5,         "ADDI");
         CHECK(2,  32'd3,         "ADDI");
@@ -86,7 +86,7 @@ module tb_top;
         RESET_CPU();
         uut.dmem_inst.mem[0] = 32'd42;
 
-        RUN(50);
+        RUN(65);   // hazards + BRAM stalls cho LW
 
         CHECK(2,  32'd20, "EX-EX");
         CHECK(4,  32'd14, "MEM-EX");
@@ -101,7 +101,7 @@ module tb_top;
 
         $readmemh("E:/VSCode/Github/Gitpush/riscv_pipeline/tb/test_phase3_sum.hex", uut.imem_inst.mem);
         RESET_CPU();
-        RUN(100);
+        RUN(150);  // loop 10 iterations + branch overhead + BRAM
 
         CHECK(1, 32'd55, "Sum");
 

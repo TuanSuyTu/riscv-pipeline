@@ -1,0 +1,15 @@
+run 100ns
+puts "=== AT 100ns (cycle 10, ADDI x1 should be at WB or past) ==="
+puts "reg_write_wb=[get_value /tb_top/uut/reg_write_wb]"
+puts "rd_addr_wb=[get_value /tb_top/uut/rd_addr_wb]"
+puts "wd_data_wb=[get_value /tb_top/uut/wd_data_wb]"
+puts "alu_result_wb=[get_value /tb_top/uut/alu_result_wb]"
+puts "mem_to_reg_wb=[get_value /tb_top/uut/mem_to_reg_wb]"
+puts "jump_wb=[get_value /tb_top/uut/jump_wb]"
+puts "read_data_wb=[get_value /tb_top/uut/read_data_wb]"
+puts "stall=[get_value /tb_top/uut/stall]"
+puts "stall_bram=[get_value /tb_top/uut/stall_bram]"
+puts "stall_loaduse=[get_value /tb_top/uut/stall_loaduse]"
+puts "bram_done=[get_value /tb_top/uut/bram_done]"
+puts "mem_read_mem=[get_value /tb_top/uut/mem_read_mem]"
+exit
