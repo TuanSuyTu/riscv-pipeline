@@ -2,13 +2,19 @@
 
 > This project was built to explore and review hardware design patterns related to SoCs. It demonstrates a deep understanding of how an instruction flows from Fetch to Decode, and how data hazards are resolved using Forwarding and Pipeline Stalls to reduce cycle penalties.
 
-## Architecture Overview
+## Instruction Set Support (RV32I)
 
-This processor implements a comprehensive subset of the **RV32I Base Integer Instruction Set**:
-- **Arithmetic & Logic**: `ADD`, `SUB`, `ADDI`, `AND`, `OR`, `XOR`, `SLL`, `SRL`, `SLT`, `SLTU`
-- **Memory Access**: `LW`, `SW`
-- **Control Flow**: `BEQ`, `BLT`, `JAL`
-- **Immediate Loading**: `LUI`, `AUIPC`
+This processor implements a robust subset of the **RV32I Base Integer Instruction Set**, ensuring full compatibility with standard RISC-V toolchains for core computational tasks. Instructions are categorized by their format:
+
+- **R-type (Register-to-Register)**: `ADD`, `SUB`, `SLL`, `SLT`, `SLTU`, `XOR`, `SRL`, `SRA`, `OR`, `AND`
+- **I-type (Immediate Arithmetic & Load)**:
+    - *Arithmetic*: `ADDI`, `SLTI`, `SLTIU`, `XORI`, `ORI`, `ANDI`, `SLLI`, `SRLI`, `SRAI`
+    - *Load*: `LW`, `LB`, `LH`, `LBU`, `LHU`
+    - *Control*: `JALR`
+- **S-type (Store)**: `SW`, `SB`, `SH`
+- **B-type (Conditional Branch)**: `BEQ`, `BNE`, `BLT`, `BGE`, `BLTU`, `BGEU`
+- **U-type (Upper Immediate)**: `LUI`, `AUIPC`
+- **J-type (Unconditional Jump)**: `JAL`
 
 Key architectural features include:
 - **5-stage in-order pipeline:** `IF` (Fetch) → `ID` (Decode) → `EX` (Execute) → `MEM` (Memory) → `WB` (Write-Back).
