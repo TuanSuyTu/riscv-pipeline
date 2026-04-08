@@ -1,0 +1,27 @@
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2022.2/bin/unwrapped/win64.o/xelab.exe -debug typical -top tb_top -snapshot tb_top_snapshot 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.pc_reg
+Compiling module work.imem
+Compiling module work.if_id_reg
+Compiling module work.control
+Compiling module work.imm_gen
+Compiling module work.regfile
+Compiling module work.id_ex_reg
+Compiling module work.hazard
+Compiling module work.alu_control
+Compiling module work.alu
+Compiling module work.ex_mem_reg
+Compiling module work.forward
+Compiling module work.dmem
+Compiling module work.mem_wb_reg
+Compiling module work.top
+Compiling module work.tb_top
+Built simulation snapshot tb_top_snapshot
