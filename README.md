@@ -61,9 +61,32 @@ graph LR
     subgraph "Hazard Management"
     FWD[Forwarding Unit] -.-> EX
     HAZ[Hazard Detection] -.-> IF & ID
-    BRAM_STALL[BRAM Stall Logic] -.-> IF & ID & EX
+    BRAM[BRAM Controller] -.-> IF & ID & EX
     end
 ```
+
+### RTL File Structure
+
+| File | Description |
+|------|-------------|
+| `top.v` | Structural top-level. Instantiates and connects all modules. No datapath logic. |
+| `ex_stage.v` | **EX Stage module.** Encapsulates Forwarding MUXes, ALU, branch comparators, and jump target calculation. |
+| `bram_ctrl.v` | **BRAM Stall Controller.** Manages the 1-cycle synchronous read latency of Block RAM. |
+| `pc_reg.v` | Program Counter register with stall/redirect support. |
+| `if_id_reg.v` | IF/ID pipeline register with stall and flush. |
+| `id_ex_reg.v` | ID/EX pipeline register with stall and flush. |
+| `ex_mem_reg.v` | EX/MEM pipeline register with stall. |
+| `mem_wb_reg.v` | MEM/WB pipeline register with flush. |
+| `control.v` | Main control unit (opcode → control signals). |
+| `alu_control.v` | ALU operation decoder (alu_op + funct3/7 → alu_ctrl). |
+| `alu.v` | 32-bit ALU supporting all RV32I arithmetic/logic ops. |
+| `imm_gen.v` | Immediate generator for all RV32I instruction formats. |
+| `regfile.v` | 32×32-bit register file with synchronous write, async read. |
+| `imem.v` | Instruction Memory (ROM). |
+| `dmem.v` | Data Memory (synchronous BRAM, 4KB). |
+| `hazard.v` | Load-Use hazard detection unit. |
+| `forward.v` | Data forwarding (bypass) unit. |
+
 
 ## How to Run
 
