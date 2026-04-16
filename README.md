@@ -42,12 +42,14 @@ The project has been synthesized and implemented on the **Xilinx Kria K26 SOM** 
 
 ## Verification
 
-The processor is verified via a self-checking testbench (`tb_top.v`) that runs a 3-phase regression suite:
-1. **ISA Coverage**: Tests every supported instruction bit-accurately.
-2. **Hazard Stress Test**: Forces complicated EX-EX and MEM-EX forwarding scenarios and Load-Use stalls.
-3. **Integration**: Executes a "Sum 1 to 10" assembly program.
+The processor is verified via a self-checking 4-phase testbench (`tb/tb_top.v`) that achieves **100% RV32I base ISA functional coverage**:
 
-**Result: 20/20 Checks PASSED.**
+1. **Phase 1 — ISA Coverage** (14 checks): Tests every supported instruction bit-accurately.
+2. **Phase 2 — Hazard Stress** (5 checks): Forces EX-EX/MEM-EX forwarding, Load-Use stalls, and BEQ taken/not-taken.
+3. **Phase 3 — Integration** (1 check): Executes a "Sum 1 to 10" assembly loop.
+4. **Phase 4 — Full RV32I** (25 checks): Covers `ANDI/ORI/XORI/SLTI/SLTIU`, `SLLI/SRLI/SRAI`, `SRA`, `AUIPC`, all 6 branch types (`BNE/BLT/BGE/BLTU/BGEU`), `JAL`, `JALR`, `LB/LH/LBU/LHU`, `SB/SH`.
+
+**Result: 45/45 Checks PASSED.**
 
 ## Architecture Overview
 
@@ -92,11 +94,16 @@ graph LR
 
 ### Simulation (Vivado CLI)
 ```bash
-mkdir sim_logs
-cd sim_logs
-xvlog -sv ../rtl/*.v ../tb/*.v
-xelab --timescale 1ns/1ps -top tb_top -snapshot snapshot
-xsim snapshot -R
+# Run from project root
+xvlog rtl/memory/imem.v rtl/memory/dmem.v rtl/memory/bram_ctrl.v \
+       rtl/core/regfile.v rtl/core/control.v rtl/core/imm_gen.v \
+       rtl/core/alu_control.v rtl/core/alu.v rtl/core/ex_stage.v \
+       rtl/pipeline/if_id_reg.v rtl/pipeline/id_ex_reg.v \
+       rtl/pipeline/ex_mem_reg.v rtl/pipeline/mem_wb_reg.v \
+       rtl/core/hazard.v rtl/core/forward.v rtl/core/pc_reg.v \
+       rtl/top/top.v tb/tb_top.v
+xelab --snapshot tb_top_snap -top tb_top
+xsim tb_top_snap --runall
 ```
 
 ### Synthesis
